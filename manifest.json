@@ -1,0 +1,22 @@
+{
+  "name": "The Avatarius",
+  "short_name": "Avatarius",
+  "description": "Middle Layer Consciousness • Trauma-Informed Transformation",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#05050F",
+  "theme_color": "#00F5FF",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://picsum.photos/id/1015/192/192",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://picsum.photos/id/1015/512/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
