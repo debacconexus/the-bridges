@@ -1,2 +1,2 @@
 [start]
-cmd = "sh start.sh && caddy run --config /app/Caddyfile"
+cmd = "sh /app/start.sh && caddy run --config /app/Caddyfile"
