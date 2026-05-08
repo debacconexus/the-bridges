@@ -1,8 +1,0 @@
-{
-  "name": "the-avatarius",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "npx serve . -p $PORT"
-  }
-}
-EOFcd ~/the-avatarius && git rm Caddyfile && git add package.json && git commit -m "Switch to node serve" && git push
