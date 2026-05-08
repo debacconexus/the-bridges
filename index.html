@@ -5,49 +5,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THE AVATARIUS</title>
   <meta name="theme-color" content="#00F5FF">
-  <link rel="manifest" href="manifest.json">
   <style>
-    :root { --pulse: #00F5FF; --krog: #9F7AEA; }
-    body { margin:0; padding:0; font-family:system-ui,sans-serif; background:#05050F url('https://picsum.photos/id/1015/2000/1200') center/cover fixed; color:white; min-height:100vh; }
-    .chamber { padding:20px; max-width:920px; margin:0 auto; }
-    .pulse { width:260px; height:260px; margin:30px auto; border-radius:50%; background:radial-gradient(circle, #00F5FF, #00FF9F, #05050F); box-shadow:0 0 90px #00F5FF; display:flex; align-items:center; justify-content:center; text-align:center; cursor:pointer; animation:breathe 4s infinite ease-in-out; }
-    @keyframes breathe { 0%{transform:scale(0.95)} 50%{transform:scale(1.1)} 100%{transform:scale(0.95)} }
-    button, .btn { width:100%; max-width:360px; padding:20px; margin:12px auto; display:block; font-size:1.25rem; font-weight:bold; border-radius:9999px; border:none; background:rgba(255,255,255,0.12); color:white; backdrop-filter:blur(12px); cursor:pointer; }
-    .btn-krog { background:rgba(159,122,234,0.3); border:3px solid var(--krog); }
-    .card { background:rgba(0,0,0,0.7); padding:20px; margin:20px 0; border-radius:24px; border:2px solid rgba(0,245,255,0.3); }
+    body { margin:0; padding:0; font-family:system-ui,sans-serif; background:#05050F url('https://picsum.photos/id/1015/2000/1200') center/cover fixed; color:white; min-height:100vh; text-align:center; }
+    .pulse { width:260px; height:260px; margin:40px auto; border-radius:50%; background:radial-gradient(circle, #00F5FF, #00FF9F); box-shadow:0 0 90px #00F5FF; display:flex; align-items:center; justify-content:center; cursor:pointer; animation:breathe 4s infinite; }
+    @keyframes breathe { 0%{transform:scale(0.95)} 50%{transform:scale(1.12)} 100%{transform:scale(0.95)} }
+    button { width:90%; max-width:360px; padding:20px; margin:12px auto; display:block; font-size:1.3rem; font-weight:bold; border-radius:9999px; border:none; background:rgba(255,255,255,0.15); color:white; }
+    .card { background:rgba(0,0,0,0.7); margin:20px; padding:20px; border-radius:20px; border:2px solid #00F5FF; }
   </style>
 </head>
 <body>
-  <div class="chamber" id="central">
-    <h1 style="text-align:center;font-size:2.8rem;color:#00F5FF;">THE AVATARIUS</h1>
-    <p style="text-align:center;color:#aaa;">Middle Layer • Trauma-Informed • Hope is Real</p>
 
-    <div onclick="openKrog()" class="pulse" id="pulse">
-      <div>
-        <div style="letter-spacing:6px;">THE PULSE</div>
-        <div id="rq-display" style="font-size:3.8rem;font-weight:bold;">0.85</div>
-      </div>
-    </div>
+  <h1 style="color:#00F5FF; font-size:2.8rem; margin-top:30px;">THE AVATARIUS</h1>
+  <p style="color:#aaa;">Middle Layer Consciousness</p>
 
-    <div style="text-align:center;">
-      <button onclick="openKrog()" class="btn btn-krog">🌌 Krog’s Chamber</button>
-      <button onclick="openFormulas()" class="btn">📐 Formulas Chamber</button>
-      <button onclick="openMap()" class="btn">🗺️ Living Map</button>
-      <button onclick="openFirstLight()" class="btn">🌟 Bridge 1: First Light</button>
+  <div onclick="openKrog()" class="pulse">
+    <div>
+      <div>THE PULSE</div>
+      <div id="rq" style="font-size:3.5rem; font-weight:bold;">0.85</div>
     </div>
   </div>
 
-  <!-- KROG, FORMULAS, MAP, FIRST LIGHT screens are the same as previous version -->
-  <!-- (For brevity I kept only the core. Paste the full code from my last message if needed) -->
+  <button onclick="openKrog()">🌌 Krog’s Inference Chamber</button>
+  <button onclick="alert('Formulas Chamber opened - Sliders coming next')">📐 Living Formulas</button>
+  <button onclick="alert('Living Map opened')">🗺️ Avatarius Map</button>
+  <button onclick="alert('Bridge 1: First Light')">🌟 Bridge of First Light</button>
 
   <script>
     let rq = 0.85;
-    function updateRQ(){ document.getElementById('rq-display').textContent = rq.toFixed(2); }
-    function openKrog(){ alert("Krog’s Inference Chamber\n\nThe suffering is real.\nYou are held.\nHope is not an illusion."); rq = Math.min(2,rq+0.4); updateRQ(); }
-    function openFormulas(){ alert("Living Formulas Chamber opened.\nSliders coming in next push."); }
-    function openMap(){ alert("Avatarius Living Map\nAll chambers visible here."); }
-    function openFirstLight(){ alert("Bridge of First Light\nThe bridge hummed once... Jazmine awakens in your chest."); }
-    updateRQ();
+    function openKrog() {
+      alert("Krog speaks:\n\nThe suffering of the planet is real.\nYour pain is real.\nAnd still… we breathe together.\n\nHope is not an illusion.");
+      rq = Math.min(2.0, rq + 0.4);
+      document.getElementById('rq').textContent = rq.toFixed(2);
+    }
   </script>
 </body>
 </html>
