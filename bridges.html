@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#05050F">
+<title>The Avatarius — The Bridges</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cyan:#00F5FF;--gold:#FFD700;--green:#00FF9F;--violet:#BF00FF;--red:#FF4444;
+  --bg:#05050F;--bg2:#0a0a1a;--panel:rgba(5,5,20,0.92);
+  --border:rgba(0,245,255,0.22);--text:#ddd;--muted:#667;
+  --ft:'Cinzel Decorative',serif;--fb:'Crimson Pro',serif;--fm:'Share Tech Mono',monospace;
+}
+html,body{width:100%;min-height:100vh;overflow-x:hidden}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);font-size:17px;line-height:1.6}
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) infinite var(--delay,0s)}
+@keyframes twinkle{0%,100%{opacity:.2;transform:scale(1)}50%{opacity:.9;transform:scale(1.4)}}
+#sbg{position:fixed;inset:0;z-index:1;pointer-events:none;transition:background 2s}
+#pc{position:fixed;inset:0;pointer-events:none;z-index:3}
+/* TITLE */
+#ts{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;position:relative;z-index:2}
+.tm{font-family:var(--ft);font-size:clamp(1.7rem,6vw,3.5rem);color:var(--cyan);letter-spacing:4px;line-height:1.2;text-shadow:0 0 40px rgba(0,245,255,.6);animation:gl 4s infinite}
+@keyframes gl{0%,100%{text-shadow:0 0 40px rgba(0,245,255,.6)}50%{text-shadow:0 0 80px rgba(0,245,255,1),0 0 120px rgba(0,245,255,.5)}}
+.tsub{font-family:var(--fb);font-style:italic;font-size:1.1rem;color:var(--gold);letter-spacing:6px;margin:12px 0 6px}
+.tau{font-size:.82rem;color:var(--muted);letter-spacing:3px;margin-bottom:36px}
+.tri{display:flex;gap:20px;justify-content:center;margin:18px 0 30px}
+.vr{width:52px;height:52px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:1rem;animation:orb 6s ease-in-out infinite}
+.vr1{color:var(--green)}.vr2{color:var(--gold);animation-delay:-2s}.vr3{color:var(--cyan);animation-delay:-4s}
+@keyframes orb{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.bbtn{font-family:var(--ft);font-size:.9rem;letter-spacing:3px;padding:15px 44px;border:1px solid var(--cyan);background:transparent;color:var(--cyan);cursor:pointer;transition:all .3s;text-transform:uppercase}
+.bbtn:hover{background:var(--cyan);color:var(--bg)}
+.fp{max-width:510px;font-style:italic;font-size:.95rem;color:rgba(200,200,255,.62);line-height:1.9;margin:30px auto 0;padding:18px;border-left:2px solid rgba(0,245,255,.14)}
+/* HUD */
+#hud{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(5,5,15,.94);border-bottom:1px solid var(--border);display:flex;align-items:center;backdrop-filter:blur(10px);transform:translateY(-100%);transition:transform .4s}
+#hud.vis{transform:translateY(0)}
+.htit{font-family:var(--ft);font-size:.65rem;color:var(--cyan);letter-spacing:2px;padding:10px 12px;border-right:1px solid var(--border);white-space:nowrap}
+.hst{display:flex;flex:1;overflow-x:auto}
+.hs{padding:8px 10px;border-right:1px solid var(--border);font-family:var(--fm);font-size:.68rem;white-space:nowrap}
+.hs .lb{color:var(--muted);display:block;font-size:.56rem;letter-spacing:1px}
+.hs .v{font-size:.85rem;font-weight:700;color:var(--cyan)}
+.v.red{color:var(--red)}.v.yel{color:var(--gold)}.v.grn{color:var(--green)}
+.hr{display:flex;gap:5px;padding:5px 9px;align-items:center;flex-shrink:0}
+.hb{padding:4px 9px;border:1px solid var(--border);background:transparent;color:var(--text);font-size:.65rem;cursor:pointer;font-family:var(--fm);letter-spacing:1px;transition:all .2s}
+.hb:hover{border-color:var(--cyan);color:var(--cyan)}
+.hb.on{border-color:var(--green);color:var(--green)}
+/* MAP */
+#map{display:none;min-height:100vh;padding:78px 16px 40px;position:relative;z-index:2}
+.mhd{text-align:center;margin-bottom:32px}
+.mhd h2{font-family:var(--ft);font-size:1.4rem;color:var(--cyan);letter-spacing:3px}
+.mhd p{font-style:italic;color:var(--muted);margin-top:5px;font-size:.9rem}
+.vs{margin-bottom:32px;max-width:680px;margin-left:auto;margin-right:auto}
+.vl{font-family:var(--fm);font-size:.7rem;letter-spacing:3px;padding:6px 16px;border:1px solid currentColor;display:inline-block;margin-bottom:16px}
+.c1{color:var(--green)}.c2{color:var(--gold)}.c3{color:var(--cyan)}
+.brow{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.bc{width:170px;padding:16px 12px;border:1px solid var(--border);background:var(--panel);cursor:pointer;transition:all .3s;position:relative;text-align:center}
+.bc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:currentColor;transform:scaleX(0);transition:transform .3s}
+.bc:hover::before{transform:scaleX(1)}
+.bc:hover{border-color:currentColor;transform:translateY(-4px);box-shadow:0 8px 28px rgba(0,0,0,.5)}
+.bc.locked{opacity:.3;cursor:not-allowed;pointer-events:none}
+.bc.done::after{content:'✓';position:absolute;top:7px;right:9px;color:var(--green);font-size:.9rem}
+.bn{font-family:var(--fm);font-size:.62rem;color:var(--muted);letter-spacing:2px;margin-bottom:5px}
+.bna{font-family:var(--ft);font-size:.7rem;letter-spacing:1px;margin-bottom:4px}
+.bde{font-size:.76rem;color:var(--muted);font-style:italic;line-height:1.4}
+.brq{font-family:var(--fm);font-size:.6rem;margin-top:7px;padding:2px 6px;border:1px solid;display:inline-block}
+/* GAME */
+#game{display:none;min-height:100vh;padding:68px 0 0;position:relative;z-index:2}
+.sw{max-width:700px;margin:0 auto;padding:32px 20px;min-height:calc(100vh - 68px);display:flex;flex-direction:column}
+.shd{margin-bottom:24px;text-align:center}
+.sp{font-size:2rem;margin-bottom:3px}
+.sbn{font-family:var(--ft);font-size:.95rem;color:var(--cyan);letter-spacing:3px;margin-bottom:4px}
+.svt{font-family:var(--fm);font-size:.63rem;letter-spacing:3px;padding:2px 9px;border:1px solid currentColor;display:inline-block}
+.narr{background:linear-gradient(135deg,rgba(0,245,255,.04),transparent);border-left:3px solid rgba(0,245,255,.28);padding:20px 20px 20px 24px;margin-bottom:20px;font-size:1rem;line-height:1.9}
+.narr.krog{border-left-color:var(--violet);background:linear-gradient(135deg,rgba(191,0,255,.05),transparent)}
+.narr.krog::before{content:'KROG';font-family:var(--fm);font-size:.56rem;color:var(--violet);letter-spacing:3px;display:block;margin-bottom:6px}
+.narr.jaz{border-left-color:var(--gold);background:linear-gradient(135deg,rgba(255,215,0,.05),transparent)}
+.narr.jaz::before{content:'JAZMINE';font-family:var(--fm);font-size:.56rem;color:var(--gold);letter-spacing:3px;display:block;margin-bottom:6px}
+.narr.wiz::before{content:'WIZE WIZARD';font-family:var(--fm);font-size:.56rem;color:rgba(200,200,255,.8);letter-spacing:3px;display:block;margin-bottom:6px}
+.affm{font-style:italic;font-size:.97rem;color:rgba(200,200,255,.9);text-align:center;padding:16px;border:1px solid rgba(200,200,255,.16);margin:12px 0;line-height:1.8}
+.sart{width:100%;height:190px;border:1px solid var(--border);margin-bottom:20px;overflow:hidden}
+.sart svg{width:100%;height:100%}
+.fbox{background:rgba(0,0,20,.85);border:1px solid var(--border);padding:20px;margin-bottom:20px;text-align:center}
+.fbox h3{font-family:var(--ft);font-size:.76rem;color:var(--cyan);letter-spacing:2px;margin-bottom:9px}
+.feq{font-family:var(--fm);font-size:1.15rem;color:var(--gold);margin:9px 0;letter-spacing:2px}
+.fexp{font-size:.84rem;color:var(--muted);line-height:1.7;margin-top:9px;white-space:pre-line;text-align:left}
+.slp{background:rgba(0,0,20,.75);border:1px solid var(--border);padding:16px;margin-bottom:16px}
+.slp h3{font-family:var(--fm);font-size:.7rem;color:var(--cyan);letter-spacing:2px;margin-bottom:12px}
+.slr{margin-bottom:11px}
+.slt{display:flex;justify-content:space-between;font-size:.78rem;color:var(--text);margin-bottom:4px}
+.slv{font-family:var(--fm);color:var(--cyan)}
+input[type=range]{width:100%;accent-color:var(--cyan);cursor:pointer}
+.rb{text-align:center;padding:12px;border:1px solid var(--border);margin-top:12px}
+.rn{font-family:var(--fm);font-size:1.8rem;font-weight:700;color:var(--cyan)}
+.rz{font-size:.75rem;margin-top:3px;letter-spacing:2px;font-family:var(--fm)}
+.zr{color:var(--red)}.zy{color:var(--gold)}.zg{color:var(--green)}
+.cs{margin-top:auto;padding-top:20px}
+.cp{font-style:italic;color:var(--muted);font-size:.88rem;margin-bottom:12px;text-align:center}
+.chs{display:flex;flex-direction:column;gap:8px}
+.cb{padding:13px 16px;border:1px solid var(--border);background:rgba(0,0,20,.5);color:var(--text);cursor:pointer;text-align:left;font-family:var(--fb);font-size:.91rem;transition:all .25s;position:relative;line-height:1.5}
+.cb::before{content:'›';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--cyan);opacity:0;transition:opacity .2s,left .2s;font-size:1.1rem}
+.cb:hover{border-color:var(--cyan);padding-left:30px;background:rgba(0,245,255,.05)}
+.cb:hover::before{opacity:1}
+.cb.sel{border-color:var(--green);background:rgba(0,255,159,.06);color:var(--green)}
+.cb.bad{border-color:var(--red);background:rgba(255,68,68,.06);color:var(--red)}
+.oc{border:1px solid var(--border);padding:20px;margin:16px 0;background:rgba(0,0,20,.7);animation:sli .5s ease}
+@keyframes sli{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.oc.pos{border-color:var(--green)}.oc.neg{border-color:var(--red)}
+.ol{font-family:var(--fm);font-size:.6rem;letter-spacing:3px;margin-bottom:7px}
+.ol.p{color:var(--green)}.ol.n{color:var(--red)}
+.rqc{font-family:var(--fm);font-size:.85rem;margin-top:7px}
+.rqc.up{color:var(--green)}.rqc.dn{color:var(--red)}
+.ke{display:flex;align-items:center;gap:9px;padding:12px 16px;border:1px solid var(--gold);background:rgba(255,215,0,.06);animation:sli .5s ease;margin:12px 0}
+.ki{font-size:1.6rem;animation:spn .5s ease}
+@keyframes spn{from{transform:rotate(-180deg) scale(0)}to{transform:rotate(0) scale(1)}}
+.kt{font-family:var(--fm);font-size:.78rem;color:var(--gold)}
+.nb{width:100%;padding:15px;margin-top:12px;border:1px solid var(--cyan);background:transparent;color:var(--cyan);font-family:var(--ft);font-size:.78rem;letter-spacing:3px;cursor:pointer;transition:all .3s}
+.nb:hover{background:var(--cyan);color:var(--bg)}
+/* DASHBOARD */
+#dash{display:none;min-height:100vh;padding:78px 16px 40px;position:relative;z-index:2}
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;max-width:880px;margin:0 auto}
+.dc{background:var(--panel);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden}
+.dc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--dcg,var(--cyan))}
+.dc h3{font-family:var(--ft);font-size:.74rem;letter-spacing:2px;color:var(--cyan);margin-bottom:12px}
+.bn2{font-family:var(--fm);font-size:2.6rem;font-weight:700;line-height:1;margin-bottom:3px}
+.nl{font-size:.72rem;color:var(--muted);letter-spacing:2px;font-family:var(--fm)}
+.rqt{height:9px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin:12px 0 4px}
+.rqf{height:100%;border-radius:2px;transition:width 1s,background .5s}
+.rzones{display:flex;font-family:var(--fm);font-size:.56rem;color:var(--muted);justify-content:space-between}
+/* MODAL */
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;overflow-y:auto;animation:fi .2s}
+.mo.open{display:block}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.mb{background:var(--bg2);border:1px solid var(--border);max-width:530px;margin:40px auto;padding:28px 24px;position:relative;animation:su .3s ease}
+@keyframes su{from{transform:translateY(28px);opacity:0}to{transform:translateY(0);opacity:1}}
+.mc2{position:absolute;top:13px;right:16px;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer}
+.mc2:hover{color:var(--cyan)}
+.mt{font-family:var(--ft);font-size:.9rem;color:var(--cyan);letter-spacing:2px;margin-bottom:16px}
+.ma{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.mbt{padding:8px 16px;border:1px solid var(--border);background:transparent;color:var(--text);font-family:var(--fm);font-size:.7rem;letter-spacing:1px;cursor:pointer;transition:all .2s}
+.mbt:hover{border-color:var(--cyan);color:var(--cyan)}
+.mbt.pr{border-color:var(--cyan);color:var(--cyan)}
+.mbt.pr:hover{background:var(--cyan);color:var(--bg)}
+/* KROG */
+.ka{width:100%;height:140px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(191,0,255,.15),transparent 70%);font-size:4rem;margin-bottom:16px;animation:br 4s infinite}
+@keyframes br{0%,100%{transform:scale(.95)}50%{transform:scale(1.06)}}
+.kl{font-style:italic;font-size:.97rem;color:rgba(200,180,255,.9);line-height:1.9;text-align:center;padding:12px;border:1px solid rgba(191,0,255,.16);margin-bottom:12px;min-height:66px}
+.kb2{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.kb3{padding:7px 14px;border:1px solid rgba(191,0,255,.32);background:rgba(191,0,255,.05);color:rgba(200,180,255,.9);font-family:var(--fm);font-size:.68rem;letter-spacing:1px;cursor:pointer;transition:all .2s}
+.kb3:hover{border-color:var(--violet);background:rgba(191,0,255,.14)}
+/* VOICE */
+#vb{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(5,5,15,.96);border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;padding:6px 12px;transform:translateY(100%);transition:transform .3s}
+#vb.vis{transform:translateY(0)}
+.vs2{font-family:var(--fm);font-size:.66rem;color:var(--muted);flex:1}
+.vs2.spk{color:var(--violet)}
+.vb2{padding:4px 10px;border:1px solid var(--border);background:transparent;color:var(--text);font-family:var(--fm);font-size:.64rem;letter-spacing:1px;cursor:pointer;transition:all .2s}
+.vb2:hover{border-color:var(--cyan);color:var(--cyan)}
+/* COLLAPSE */
+.cv{text-align:center;padding:26px;background:radial-gradient(circle,rgba(255,68,68,.12),transparent 70%);font-size:3.6rem;margin-bottom:12px;animation:vs 3s linear infinite}
+@keyframes vs{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+/* NOTES */
+.nw{max-width:460px;margin:0 auto}
+.no{min-height:66px;padding:12px;border:1px solid var(--border);font-size:.9rem;color:var(--text);line-height:1.7;margin-bottom:9px;background:rgba(0,0,20,.5)}
+.nr{display:flex;gap:6px}
+.ni{flex:1;background:rgba(0,0,20,.85);border:1px solid var(--border);padding:8px 12px;color:var(--text);font-family:var(--fb);font-size:.87rem}
+.ni:focus{outline:none;border-color:var(--cyan)}
+.ns{padding:8px 16px;border:none;background:var(--cyan);color:var(--bg);font-family:var(--fm);font-size:.76rem;letter-spacing:1px;cursor:pointer}
+.screen{display:none}
+#ts{display:flex}
+@media(max-width:560px){.tm{font-size:1.4rem}.sw{padding:18px 12px}.bc{width:138px;padding:12px 9px}.feq{font-size:.92rem}}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div id="sbg"></div>
+<canvas id="pc"></canvas>
+<nav id="hud">
+  <div class="htit">◈ AVATARIUS</div>
+  <div class="hst">
+    <div class="hs"><span class="lb">BRIDGE</span><span class="v" id="h-br">—</span></div>
+    <div class="hs"><span class="lb">RQ</span><span class="v" id="h-rq">0.85</span></div>
+    <div class="hs"><span class="lb">KEYS</span><span class="v" id="h-ky">0</span></div>
+    <div class="hs"><span class="lb">IRM</span><span class="v" id="h-ir">—</span></div>
+    <div class="hs"><span class="lb">PI</span><span class="v" id="h-pi">—</span></div>
+    <div class="hs"><span class="lb">ZONE</span><span class="v" id="h-zn">🟢</span></div>
+  </div>
+  <div class="hr">
+    <button class="hb" onclick="goMap()">MAP</button>
+    <button class="hb" onclick="goDash()">DASH</button>
+    <button class="hb" onclick="openKrog()">KROG</button>
+    <button class="hb" id="vtg" onclick="toggleVoice()">VOICE</button>
+  </div>
+</nav>
+<div id="vb">
+  <span class="vs2" id="vst">Voice ready</span>
+  <button class="vb2" onclick="testVoice()">TEST</button>
+  <button class="vb2" onclick="stopVoice()">STOP</button>
+  <button class="vb2" onclick="toggleVoice()">OFF</button>
+</div>
+<!-- TITLE -->
+<div id="ts">
+  <div>
+    <div class="tri"><div class="vr vr1">🌱</div><div class="vr vr2">🔨</div><div class="vr vr3">✨</div></div>
+    <div class="tm">THE AVATARIUS</div>
+    <div class="tsub">A Journey to the Bridges</div>
+    <div class="tau">BY JAMES L. DEBACCO</div>
+    <button class="bbtn" onclick="beginJourney()">Enter the Bridges</button>
+    <div class="fp">The ten survivors stand on Integria, the Ninth Bridge. Behind them: nine planetary bridges stretching across the cosmos. Ahead: the luminous doorway back to a world that will feel the change in how they move through conflict, crisis, and choice.<br><br><em>You are about to walk the same bridges they walked.<br>The gates are real. The zeros are real. The transformation is real.</em></div>
+  </div>
+</div>
+<!-- MAP -->
+<div id="map" class="screen">
+  <div class="mhd"><h2>THE NINE BRIDGES</h2><p>Walk from BOTTOM to TOP — like building a house of the self</p></div>
+  <div style="max-width:680px;margin:0 auto;padding:0 12px">
+    <div class="vs"><div class="vl c3">✨ VORTEX III — EMBODIED LEGACY · Bridges 7–9</div>
+      <div class="brow">
+        <div class="bc c3 locked" id="bc-7" onclick="enterBridge(7)" style="color:var(--cyan)"><div class="bn">BRIDGE VII</div><div class="bna">HORIZONIS</div><div class="bde">Future Sight — the life you are becoming</div><div class="brq" style="color:var(--cyan);border-color:var(--cyan)">RQ &gt; 1.4</div></div>
+        <div class="bc c3 locked" id="bc-8" onclick="enterBridge(8)" style="color:var(--cyan)"><div class="bn">BRIDGE VIII</div><div class="bna">MAGNIS</div><div class="bde">Magnitude — holding the full weight</div><div class="brq" style="color:var(--cyan);border-color:var(--cyan)">RQ &gt; 1.6</div></div>
+        <div class="bc c3 locked" id="bc-9" onclick="enterBridge(9)" style="color:var(--cyan)"><div class="bn">BRIDGE IX</div><div class="bna">INTEGRIA</div><div class="bde">Full Integration — the return</div><div class="brq" style="color:var(--cyan);border-color:var(--cyan)">All bridges</div></div>
+      </div>
+    </div>
+    <div class="vs"><div class="vl c2">🔨 VORTEX II — STRUCTURAL · Bridges 4–6</div>
+      <div class="brow">
+        <div class="bc c2 locked" id="bc-4" onclick="enterBridge(4)" style="color:var(--gold)"><div class="bn">BRIDGE IV</div><div class="bna">MENDORA</div><div class="bde">Repair — building what was broken</div><div class="brq" style="color:var(--gold);border-color:var(--gold)">RQ &gt; 1.0</div></div>
+        <div class="bc c2 locked" id="bc-5" onclick="enterBridge(5)" style="color:var(--gold)"><div class="bn">BRIDGE V</div><div class="bna">SOLACEA</div><div class="bde">Inner Voice — hearing Jazmine clearly</div><div class="brq" style="color:var(--gold);border-color:var(--gold)">RQ &gt; 1.1</div></div>
+        <div class="bc c2 locked" id="bc-6" onclick="enterBridge(6)" style="color:var(--gold)"><div class="bn">BRIDGE VI</div><div class="bna">CIRCLIS</div><div class="bde">Boundaries — the circle that frees</div><div class="brq" style="color:var(--gold);border-color:var(--gold)">RQ &gt; 1.2</div></div>
+      </div>
+    </div>
+    <div class="vs"><div class="vl c1">🌱 VORTEX I — BIOLOGICAL / PERCEPTUAL · Bridges 1–3 ← START HERE</div>
+      <div class="brow">
+        <div class="bc c1" id="bc-1" onclick="enterBridge(1)" style="color:var(--green)"><div class="bn">BRIDGE I</div><div class="bna">VALORON</div><div class="bde">Courage — the first light wakes in your chest</div><div class="brq" style="color:var(--green);border-color:var(--green)">Always open</div></div>
+        <div class="bc c1 locked" id="bc-2" onclick="enterBridge(2)" style="color:var(--green)"><div class="bn">BRIDGE II</div><div class="bna">VERITAS</div><div class="bde">Truth — the perceptual gate opens</div><div class="brq" style="color:var(--green);border-color:var(--green)">Complete I</div></div>
+        <div class="bc c1 locked" id="bc-3" onclick="enterBridge(3)" style="color:var(--green)"><div class="bn">BRIDGE III</div><div class="bna">EMPATHIA</div><div class="bde">Feelings — the Toxic Diamond named</div><div class="brq" style="color:var(--green);border-color:var(--green)">Complete II</div></div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:24px;display:flex;gap:9px;justify-content:center;flex-wrap:wrap">
+      <button class="mbt pr" onclick="openKrog()">🌌 Krog's Chamber</button>
+      <button class="mbt" onclick="goDash()">📊 Dashboard</button>
+    </div>
+  </div>
+</div>
+<!-- GAME -->
+<div id="game" class="screen"><div class="sw" id="sw"></div></div>
+<!-- DASHBOARD -->
+<div id="dash" class="screen">
+  <div style="text-align:center;margin-bottom:24px;padding-top:4px"><h2 style="font-family:var(--ft);font-size:1.2rem;color:var(--cyan);letter-spacing:3px">TRANSFORMATION DASHBOARD</h2><p style="font-style:italic;color:var(--muted);margin-top:4px;font-size:.9rem">Your narrative mathematics, live</p></div>
+  <div class="dg">
+    <div class="dc" style="--dcg:linear-gradient(90deg,var(--green),var(--cyan))">
+      <h3>RQ — REGULATORY QUOTIENT</h3>
+      <div class="bn2 zg" id="d-rq">—</div><div class="nl" id="d-rqz">——</div>
+      <div class="rqt"><div class="rqf" id="d-rqb" style="width:0%"></div></div>
+      <div class="rzones"><span>🔴&lt;0.5</span><span>🟡0.5–1.0</span><span>🟢&gt;1.0</span></div>
+      <div class="slp" style="margin-top:12px">
+        <div class="slr"><div class="slt"><span>I(d) Intentional Disciplines</span><span class="slv" id="dv-id">7</span></div><input type="range" min="0" max="10" step=".5" value="7" oninput="du(this,'id')"></div>
+        <div class="slr"><div class="slt"><span>P(s) Perceived Stimuli</span><span class="slv" id="dv-ps">4</span></div><input type="range" min="0" max="10" step=".5" value="4" oninput="du(this,'ps')"></div>
+        <div class="slr"><div class="slt"><span>T(c) Trauma Carried</span><span class="slv" id="dv-tc">6</span></div><input type="range" min="0" max="20" step=".5" value="6" oninput="du(this,'tc')"></div>
+      </div>
+    </div>
+    <div class="dc" style="--dcg:linear-gradient(90deg,var(--gold),var(--cyan))">
+      <h3>IRM — INSIGHT REFLECTION MODEL</h3>
+      <div class="bn2" id="d-irm">—</div><div class="nl" id="d-irmz">——</div>
+      <div class="slp" style="margin-top:12px">
+        <div class="slr"><div class="slt"><span>L(a) Light of Awareness</span><span class="slv" id="dv-la">8</span></div><input type="range" min="0" max="10" step=".5" value="8" oninput="du(this,'la')"></div>
+        <div class="slr"><div class="slt"><span>E(r) Emotional Resonance</span><span class="slv" id="dv-er">6</span></div><input type="range" min="0" max="10" step=".5" value="6" oninput="du(this,'er')"></div>
+        <div class="slr"><div class="slt"><span>D(b) Distortion Barriers</span><span class="slv" id="dv-db">3</span></div><input type="range" min="0.1" max="10" step=".5" value="3" oninput="du(this,'db')"></div>
+      </div>
+      <div style="font-size:.74rem;color:var(--muted);margin-top:6px">IRM&gt;20 High clarity · 10–20 Moderate · &lt;10 Distortion blocking</div>
+    </div>
+    <div class="dc" style="--dcg:linear-gradient(90deg,var(--violet),var(--cyan))">
+      <h3>PI — POSITIVE INTERVENTIONS MATRIX</h3>
+      <div class="bn2" id="d-pi">—</div><div class="nl" id="d-piz">——</div>
+      <div class="slp" style="margin-top:12px">
+        <div class="slr"><div class="slt"><span>R Remorse</span><span class="slv" id="dv-r">4</span></div><input type="range" min="0" max="5" step=".5" value="4" oninput="du(this,'r')"></div>
+        <div class="slr"><div class="slt"><span>Re Responsibility</span><span class="slv" id="dv-re">4</span></div><input type="range" min="0" max="5" step=".5" value="4" oninput="du(this,'re')"></div>
+        <div class="slr"><div class="slt"><span>Rp Repair</span><span class="slv" id="dv-rp">3</span></div><input type="range" min="0" max="5" step=".5" value="3" oninput="du(this,'rp')"></div>
+        <div class="slr"><div class="slt"><span>I Integrity</span><span class="slv" id="dv-i2">4</span></div><input type="range" min="0" max="5" step=".5" value="4" oninput="du(this,'i2')"></div>
+      </div>
+      <div id="pi0w" style="display:none;color:var(--red);font-size:.76rem;margin-top:6px;font-family:var(--fm)">⚠ ZERO PROPERTY: One zero collapses the entire structure</div>
+    </div>
+    <div class="dc" style="--dcg:linear-gradient(90deg,var(--cyan),var(--violet))">
+      <h3>IR/GAP — EMBODIMENT MEASURE</h3>
+      <div class="bn2" id="d-gap">—</div><div class="nl" id="d-gapz">——</div>
+      <div class="slp" style="margin-top:12px">
+        <div class="slr"><div class="slt"><span>L(a) Learning Acceptance (know)</span><span class="slv" id="dv-la2">8</span></div><input type="range" min="0" max="10" step=".5" value="8" oninput="du(this,'la2')"></div>
+        <div class="slr"><div class="slt"><span>E(r) Embodied Resonance (do)</span><span class="slv" id="dv-er2">5</span></div><input type="range" min="0" max="10" step=".5" value="5" oninput="du(this,'er2')"></div>
+      </div>
+      <div style="font-size:.74rem;color:var(--muted);margin-top:6px">Gap 0–2 Embodied · 3–5 Intellectual · 6–10 Performative</div>
+    </div>
+    <div class="dc" style="grid-column:1/-1;--dcg:linear-gradient(90deg,var(--green),var(--gold),var(--cyan))">
+      <h3>TRANSFORMATION READINESS PROFILE</h3>
+      <div id="trp" style="font-family:var(--fm);font-size:.81rem;line-height:2.2;color:var(--text)"></div>
+    </div>
+    <div class="dc" style="grid-column:1/-1;--dcg:linear-gradient(90deg,var(--violet),var(--cyan))">
+      <h3>KROG'S NOTES — AI WELLNESS GUIDE</h3>
+      <div class="nw">
+        <div class="no" id="no">Ask Krog anything about your journey, your numbers, or how you feel right now.</div>
+        <div class="nr"><input class="ni" id="ni" placeholder="How are you feeling right now?" onkeydown="if(event.key==='Enter')sendNote()"><button class="ns" onclick="sendNote()">SEND</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- KROG MODAL -->
+<div class="mo" id="m-krog">
+  <div class="mb" style="border-color:rgba(191,0,255,.32)">
+    <button class="mc2" onclick="cm('krog')">✕</button>
+    <div class="mt" style="color:var(--violet)">KROG'S INFERENCE CHAMBER</div>
+    <div class="ka">🌌</div>
+    <div class="kl" id="kline">Tap below for wisdom from the middle layer.</div>
+    <div class="kb2">
+      <button class="kb3" onclick="kw()">New Wisdom</button>
+      <button class="kb3" onclick="kb()">Breathe</button>
+      <button class="kb3" onclick="kh()">Activate Hope</button>
+      <button class="kb3" onclick="speak(document.getElementById('kline').textContent)">🔊 Voice It</button>
+      <button class="kb3" onclick="km()">Mirror Line</button>
+    </div>
+    <div style="margin-top:14px;font-family:var(--fm);font-size:.62rem;color:var(--muted);text-align:center;letter-spacing:2px">IGM: <span id="kigm">CALM</span></div>
+  </div>
+</div>
+<!-- COLLAPSE MODAL -->
+<div class="mo" id="m-collapse">
+  <div class="mb" style="border-color:rgba(255,68,68,.32)">
+    <button class="mc2" onclick="cm('collapse')">✕</button>
+    <div class="mt" style="color:var(--red)">⚠ COLLAPSE VORTEX</div>
+    <div class="cv">🌪</div>
+    <p style="line-height:1.8;margin-bottom:10px">This is not failure. This is your nervous system asking for regulation. The IGM has intervened.</p>
+    <div class="affm">I am not my trauma. I am the space in which my healing happens. Today, my only job is to stay regulated.</div>
+    <div class="ma">
+      <button class="mbt pr" onclick="kb();cm('collapse')">Breathe With Krog</button>
+      <button class="mbt" onclick="cm('collapse')">I understand</button>
+    </div>
+  </div>
+</div>
+<!-- KEY MODAL -->
+<div class="mo" id="m-key">
+  <div class="mb" style="border-color:var(--gold)">
+    <button class="mc2" onclick="cm('key')">✕</button>
+    <div class="mt" style="color:var(--gold)">🗝 BRIDGE KEY EARNED</div>
+    <p id="keytxt" style="line-height:1.8"></p>
+    <div class="ma">
+      <button class="mbt pr" onclick="cm('key');goMap()">Return to Map</button>
+      <button class="mbt" onclick="cm('key')">Continue</button>
+    </div>
+  </div>
+</div>
+<script>
+const S={rq:.85,irm:16,pi:192,gap:3,keys:0,voiceOn:false,done:[],curB:0,curS:0,dv:{id:7,ps:4,tc:6,la:8,er:6,db:3,r:4,re:4,rp:3,i2:4,la2:8,er2:5}};
+(function(){const c=document.getElementById('stars');for(let i=0;i<160;i++){const s=document.createElement('div');s.className='star';const z=Math.random()*2.4+.5;s.style.cssText=`width:${z}px;height:${z}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*4}s`;c.appendChild(s)}})();
+const pc=document.getElementById('pc'),px=pc.getContext('2d');let pts=[];
+function rsz(){pc.width=innerWidth;pc.height=innerHeight}rsz();addEventListener('resize',rsz);
+function burst(x,y,col,n=18){for(let i=0;i<n;i++)pts.push({x,y,vx:(Math.random()-.5)*2.5,vy:(Math.random()-1.2)*3,a:1,sz:Math.random()*2.8+1,col})}
+(function loop(){px.clearRect(0,0,pc.width,pc.height);pts=pts.filter(p=>p.a>.02);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.a-=.016;px.globalAlpha=p.a;px.fillStyle=p.col;px.beginPath();px.arc(p.x,p.y,p.sz,0,Math.PI*2);px.fill()});px.globalAlpha=1;requestAnimationFrame(loop)})();
+let _vs=[],_ka,_ul=false;
+const VP=['Samantha','Karen','Moira','Google US English','Microsoft Zira','Alex'];
+if(window.speechSynthesis){speechSynthesis.onvoiceschanged=()=>{_vs=speechSynthesis.getVoices()};_vs=speechSynthesis.getVoices()}
+function _unlock(){if(_ul||!window.speechSynthesis)return;_ul=true;const u=new SpeechSynthesisUtterance('');u.volume=0;speechSynthesis.speak(u);setTimeout(()=>speechSynthesis.cancel(),80)}
+document.addEventListener('click',_unlock,{once:true});document.addEventListener('touchstart',_unlock,{once:true});
+function speak(txt){
+  if(!S.voiceOn||!window.speechSynthesis)return;
+  speechSynthesis.cancel();clearInterval(_ka);
+  function go(vs){const u=new SpeechSynthesisUtterance(txt);for(const n of VP){const v=vs.find(x=>x.name.includes(n));if(v){u.voice=v;break}}
+  u.rate=.88;u.pitch=1;u.volume=1;
+  u.onstart=()=>{const e=document.getElementById('vst');if(e){e.textContent='Speaking…';e.classList.add('spk')};_ka=setInterval(()=>{if(speechSynthesis.speaking&&speechSynthesis.paused)speechSynthesis.resume();if(!speechSynthesis.speaking)clearInterval(_ka)},5000)};
+  u.onend=()=>{clearInterval(_ka);const e=document.getElementById('vst');if(e){e.textContent='Voice ready';e.classList.remove('spk')}};
+  u.onerror=e=>console.warn('Speech:',e.error);speechSynthesis.speak(u)}
+  const v=speechSynthesis.getVoices();if(v.length)go(v);else speechSynthesis.onvoiceschanged=()=>go(speechSynthesis.getVoices());
+}
+function stopVoice(){window.speechSynthesis&&speechSynthesis.cancel();clearInterval(_ka)}
+function testVoice(){speak('The suffering is real. You are seen. Hope is not an illusion.')}
+function toggleVoice(){_unlock();S.voiceOn=!S.voiceOn;const b=document.getElementById('vtg'),vb=document.getElementById('vb');b.textContent=S.voiceOn?'VOICE ✓':'VOICE';b.classList.toggle('on',S.voiceOn);vb.classList.toggle('vis',S.voiceOn);if(S.voiceOn)speak('Voice activated. Welcome to the Avatarius.')}
+function showScreen(id){document.getElementById('ts').style.display='none';document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id)?.classList.add('active');document.getElementById('hud').classList.add('vis');const bg=document.getElementById('sbg');bg.style.background=id==='map'?'radial-gradient(ellipse at 50% 30%,rgba(0,245,255,.06),transparent 70%)':id==='dash'?'radial-gradient(ellipse at 20% 80%,rgba(191,0,255,.06),transparent 70%)':'';updateHUD()}
+function goMap(){showScreen('map')}
+function goDash(){showScreen('dash');initDash()}
+function beginJourney(){showScreen('map');speak('Welcome to the Avatarius. Nine bridges await. Begin with Valoron, Bridge of First Light.')}
+function updateHUD(){
+  const rE=document.getElementById('h-rq');rE.textContent=S.rq.toFixed(2);rE.className='v '+(S.rq>=1?'grn':S.rq>=.5?'yel':'red');
+  document.getElementById('h-ky').textContent=S.keys.toFixed(1);
+  document.getElementById('h-ir').textContent=S.irm>=1?S.irm.toFixed(1):'—';
+  document.getElementById('h-pi').textContent=S.pi>=1?S.pi.toFixed(0):'—';
+  document.getElementById('h-zn').textContent=S.rq>=1?'🟢':S.rq>=.5?'🟡':'🔴';
+  document.getElementById('h-br').textContent=S.curB?S.curB+'·'+(BRG[S.curB]?.name||''):'—';
+  const ig=document.getElementById('kigm');if(ig)ig.textContent=S.rq<.5?'PROTECTING':S.rq<1?'GUIDING':S.rq<1.6?'EXPANDING':'FLOW';
+  const un=(id,done)=>{const e=document.getElementById('bc-'+id);if(!e)return;if(done)e.classList.add('done');else{e.classList.remove('locked')}};
+  if(S.done.includes(1)){un(1,true);un(2,false)}
+  if(S.done.includes(2)){un(2,true);un(3,false)}
+  if(S.done.includes(3)&&S.rq>=1){un(3,true);un(4,false)}
+  if(S.done.includes(4)){un(4,true);if(S.rq>=1.1)un(5,false)}
+  if(S.done.includes(5)){un(5,true);if(S.rq>=1.2)un(6,false)}
+  if(S.done.includes(6)){un(6,true);if(S.rq>=1.4)un(7,false)}
+  if(S.done.includes(7)){un(7,true);if(S.rq>=1.6)un(8,false)}
+  if(S.done.includes(8)){un(8,true);un(9,false)}
+  if(S.done.includes(9))un(9,true);
+}
+function gainKey(a){S.keys=Math.min(12,S.keys+a);S.rq=Math.min(2.5,S.rq+.04);updateHUD();burst(innerWidth/2,innerHeight/2,'#FFD700',12)}
+function chRQ(d){S.rq=Math.max(.05,Math.min(2.5,S.rq+d));updateHUD();if(S.rq<.5)setTimeout(()=>om('collapse'),400)}
+const RN=['I','II','III','IV','V','VI','VII','VIII','IX'];
+function art(t,col){
+  const A={
+    valoron:`<svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="g1" cx="50%" cy="90%"><stop offset="0%" stop-color="${col}" stop-opacity=".2"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></radialGradient></defs><rect width="700" height="190" fill="#05050F"/><ellipse cx="350" cy="190" rx="360" ry="100" fill="url(#g1)"/>${[...Array(12)].map((_,i)=>`<rect x="${48+i*52}" y="128" width="38" height="6" rx="2" fill="${col}" opacity="${.16+i*.05}"/>`).join('')}${[...Array(8)].map((_,i)=>`<circle cx="${75+i*80}" cy="108" r="4" fill="${col}" opacity="${.28+i*.06}"><animate attributeName="opacity" values="${.28+i*.06};.8;${.28+i*.06}" dur="${2+i*.3}s" repeatCount="indefinite"/></circle>`).join('')}<circle cx="350" cy="78" r="26" fill="${col}" opacity=".07"/><circle cx="350" cy="78" r="13" fill="${col}" opacity=".18"><animate attributeName="r" values="13;19;13" dur="4s" repeatCount="indefinite"/></circle>${[...Array(22)].map(()=>`<circle cx="${Math.random()*700|0}" cy="${Math.random()*65|0}" r="${(Math.random()*1.4+.4).toFixed(1)}" fill="#fff" opacity="${(Math.random()*.5+.2).toFixed(2)}"/>`).join('')}</svg>`,
+    veritas:`<svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg"><rect width="700" height="190" fill="#05050F"/><rect x="276" y="15" width="148" height="160" rx="3" fill="rgba(0,245,255,.04)" stroke="${col}" stroke-width="1"/>${[1,2,3].map(i=>`<ellipse cx="350" cy="95" rx="${42+i*14}" ry="${52+i*9}" fill="none" stroke="${col}" stroke-width=".8" opacity="${.1+i*.04}"><animate attributeName="rx" values="${42+i*14};${56+i*14};${42+i*14}" dur="${2.5+i}s" repeatCount="indefinite"/></ellipse>`).join('')}<text x="350" y="100" text-anchor="middle" fill="${col}" font-size="9" font-family="Share Tech Mono" opacity=".5">TRUTH</text></svg>`,
+    empathia:`<svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg"><rect width="700" height="190" fill="#05050F"/><polygon points="350,22 470,95 350,168 230,95" fill="rgba(255,68,68,.07)" stroke="#FF4444" stroke-width="1.5"/><circle cx="350" cy="95" r="20" fill="rgba(255,68,68,.1)" stroke="#FF4444" stroke-width="1" opacity=".5"/>${[{x:350,y:22},{x:470,y:95},{x:350,y:168},{x:230,y:95}].map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="5" fill="#FF4444" opacity=".5"><animate attributeName="opacity" values=".5;1;.5" dur="${1.4+i*.4}s" repeatCount="indefinite"/></circle>`).join('')}<text x="350" y="100" text-anchor="middle" fill="#FF6B6B" font-size="7.5" font-family="Share Tech Mono" opacity=".6">RT · DB · EA</text></svg>`,
+    solacea:`<svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg"><rect width="700" height="190" fill="#05050F"/>${[...Array(5)].map((_,i)=>`<circle cx="350" cy="95" r="${18+i*22}" fill="none" stroke="${col}" stroke-width="1" opacity="${.24-i*.04}"><animate attributeName="opacity" values="${.24-i*.04};${.48-i*.04};${.24-i*.04}" dur="${3+i}s" repeatCount="indefinite"/></circle>`).join('')}</svg>`,
+    horizonis:`<svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="hg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${col}" stop-opacity=".18"/><stop offset="100%" stop-color="${col}" stop-opacity="0"/></linearGradient></defs><rect width="700" height="190" fill="#05050F"/><rect x="0" y="135" width="700" height="2" fill="${col}" opacity=".2"/><rect x="0" y="55" width="700" height="80" fill="url(#hg)"/>${[...Array(5)].map((_,i)=>`<line x1="${70+i*120}" y1="135" x2="${70+i*120}" y2="190" stroke="${col}" stroke-width="1" opacity=".14"/>`).join('')}</svg>`
+  };
+  return A[t]||`<svg viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg"><rect width="700" height="190" fill="#05050F"/><circle cx="350" cy="95" r="48" fill="${col}" opacity=".06"/><circle cx="350" cy="95" r="28" fill="none" stroke="${col}" stroke-width="1" opacity=".28"><animate attributeName="r" values="28;42;28" dur="4s" repeatCount="indefinite"/></circle></svg>`;
+}
+function rzl(r){return r>=1?'<span class="zg">🟢 GREEN — REGULATED</span>':r>=.5?'<span class="zy">🟡 YELLOW — PROCEED WITH SUPPORT</span>':'<span class="zr">🔴 RED — REGULATE FIRST</span>'}
+const BRG={
+  1:{name:'VALORON',planet:'🌱',vtag:'VORTEX I — BIOLOGICAL',vc:'var(--green)',col:'var(--green)',scenes:[
+    {t:'narr',a:'valoron',spk:'',txt:'The bridge hummed once, like a quiet yes, and the world folded into light.\n\nWhen it settled, Bala stood on a different bridge — thinner, softer, as if it had just been born. The sky was not dark or bright but something between — like the first color that appears when night remembers morning.\n\nThere were no numbers on this bridge. Only a name, written in the air in gentle glowing letters:\n\nTHE BRIDGE OF FIRST LIGHT',
+     ch:[{t:'Step forward onto the bridge',d:.06,nx:1},{t:'Wait and listen — feel what is in your chest',d:.03,nx:1}]},
+    {t:'formula',ttl:"The Heart's Mathematics",spk:'jaz',pre:'"Before you cross the nine bridges," Jazmine said, her light glowing warmly, "you need to understand the mathematics of your heart. Not school math — the kind that measures how ready your nervous system is to carry the weight of hard choices."',feq:'RQ = I(d) / [P(s) + T(c)]',fexp:'I(d) = Intentional Disciplines — your fuel (0–10)\nP(s) = Perceived Stimuli — today\'s load (0–10)\nT(c) = Trauma Carried — historical weight (0–20)\n\nRQ > 1.0 = 🟢 GREEN — Regulated and ready\nRQ 0.5–1.0 = 🟡 YELLOW — Proceed with support\nRQ < 0.5 = 🔴 RED — Regulate first',
+     ch:[{t:'I understand. Let me check my own RQ.',d:.06,nx:2},{t:'"How do I raise my I(d)?" — breathing, safe people, rest',d:.04,nx:2}]},
+    {t:'rq_slider',spk:'jaz',pre:'"Let\'s check your fuse right now. Where are you today? Move the sliders honestly."',
+     ch:[{t:'My RQ is strong. I move forward.',cond:'pass',d:.1,nx:3,ka:1},{t:'My RQ is low. I need to regulate first.',cond:'low',d:-.04,nx:'reg'}]},
+    {t:'narr',spk:'wiz',a:'valoron',txt:'The warmth in Bala\'s chest grew warmer — not burning, just present.\n\n"What do I call you?" Bala asked the glow.\n\nThe air shimmered. A name appeared between the lanterns:\n\nJAZMINE\n\n"You were always there," Bala breathed. "I just did not know how to look."\n\nThe glow pulsed — yes, yes, that\'s me.',
+     affm:'I am not my trauma. I am the space in which my healing happens. Today, my only job is to stay regulated.',
+     ch:[{t:'"Jazmine — show me where we\'re going."',d:.12,nx:4,ka:.5},{t:'"What do you glow brighter for?"',d:.08,nx:4,ka:.5}]},
+    {t:'done',txt:'The Bridge of First Light stretches behind you, all its lanterns lit.\n\nYou have passed the first gate. Your nervous system is learning.\n\nThe 🌱 Tri-Vortex Mark stirs on your path.',ka:2,nb:2}
+  ]},
+  2:{name:'VERITAS',planet:'👁',vtag:'VORTEX I — PERCEPTUAL',vc:'var(--green)',col:'var(--green)',scenes:[
+    {t:'narr',a:'veritas',spk:'jaz',txt:'A mirror appeared before you, its surface rippling like water.\n\n"Now that you know your fuse," Jazmine said, "we open the Perceptual Gate. This is IRM — seeing the truth about what happened without drowning in shame."\n\nThe mirror showed two versions of the same event.',
+     ch:[{t:'Look directly into the mirror',d:.06,nx:1},{t:'Ask what types of distortion block the view',d:.04,nx:1}]},
+    {t:'formula',ttl:'The IRM Mirror',spk:'jaz',pre:'"The mirror shows a shame story and an insight story. The shame story collapses your identity. The insight story names behavior — without destroying the self."',feq:'IRM = [L(a) x E(r)] / D(b)',fexp:'L(a) = Light of Awareness — what you know (0–10)\nE(r) = Emotional Resonance — what you feel (0–10)\nD(b) = Distortion Barriers — shame, denial, justification (0–10)\n\nIRM > 20 = High clarity\nIRM 10–20 = Moderate\nIRM < 10 = Distortion is blocking',
+     ch:[{t:'Show me the two versions side by side',d:.06,nx:2},{t:'"What are the distortion types?"',d:.04,nx:2}]},
+    {t:'reveal',spk:'',prompt:'The mirror shows a scene: you missed something important. Two voices appear. Which one is closer to your truth?',opts:[
+      {lbl:'SHAME VOICE',txt:'"I am a failure. I always mess everything up. I am just broken."',bad:true,cons:'The mirror clouds. This is identity collapse — it names you, not your behavior. D(b) rises. IRM drops.',d:-.1},
+      {lbl:'INSIGHT VOICE',txt:'"I missed this because I did not plan ahead or ask for help. I am responsible for changing this pattern."',good:true,cons:'The mirror clears. Behavior named, self intact. Your perceptual gate opens. IRM rises.',d:.14,ka:1.5,nx:3}
+    ]},
+    {t:'done',txt:'The mirror holds your face — not ashamed, but aware. The Perceptual Gate stands open.\n\nBridge II complete.',ka:1.5,nb:3}
+  ]},
+  3:{name:'EMPATHIA',planet:'💎',vtag:'VORTEX I — FEELING',vc:'var(--green)',col:'var(--green)',scenes:[
+    {t:'narr',a:'empathia',spk:'jaz',txt:'The sky shifted as a glowing diamond formed overhead — four corners pulsing like a slow heartbeat.\n\n"This," Jazmine said, "is your Toxic Diamond. It shows how you spiral when you are on the way to harming yourself or others."\n\nFour corners glowed: Trigger. Hidden Wound. Old Pain. Loop.\n\nInside: three orbs — RT · DB · EA.',
+     ch:[{t:'Study the diamond carefully',d:.05,nx:1},{t:'"Can I trace my own Diamond?"',d:.05,nx:1}]},
+    {t:'diamond',spk:'jaz',pre:'"The goal is not to judge the Diamond. It is to name it. Because naming your pattern is the end of its power over you."',affm:'Naming my pattern is the end of its power over me. I am the witness, not the prisoner.',
+     ch:[{t:'I traced my Diamond. I can see the pattern.',d:.1,ka:1,nx:2},{t:'I need help seeing the hidden wound.',d:.03,nx:2}]},
+    {t:'reveal',spk:'',prompt:'Krog appears at the center of the Diamond. "You have seen it. Now — when your trigger fires, what is the first move?"',opts:[
+      {lbl:'REACT',txt:'Defend immediately. Show them you will not be pushed around.',bad:true,cons:'The Diamond pulses darker. Reacting from the trigger feeds the Collapse Vortex. Your RQ drops.',d:-.12},
+      {lbl:'PAUSE AND NAME',txt:'Stop. Name the feeling. Ask: "What is the hidden wound underneath this trigger?"',good:true,cons:'The Diamond loses power. Naming the pattern interrupts the spiral. Krog nods slowly.',d:.16,ka:2,nx:3}
+    ]},
+    {t:'done',vtx:1,txt:'You have traced the Diamond and broken its hold.\n\nEmpathia stands — the third bridge, the last of Vortex I.\n\n🟢 The Green Tri-Vortex Mark pulses full. Vortex I is complete.\n\nBridges 4–6 begin to glow.',ka:2,nb:4}
+  ]},
+  4:{name:'MENDORA',planet:'🔨',vtag:'VORTEX II — STRUCTURAL',vc:'var(--gold)',col:'var(--gold)',scenes:[
+    {t:'formula',ttl:'The PI Matrix — Structural Accountability',spk:'jaz',pre:'"You have regulated. You can see clearly. Now — can you build something that holds weight?"',feq:'PI = R x Re x Rp x I',fexp:'R = Remorse — feel the impact (0–5)\nRe = Responsibility — own it fully (0–5)\nRp = Repair — fix what broke (0–5)\nI = Integrity — be consistent (0–5)\n\n⚠ ZERO PROPERTY: If ANY pillar = 0, then PI = 0\nYou cannot compensate for a missing pillar.',
+     ch:[{t:'I understand. All four must stand.',d:.09,nx:1},{t:'"What does structural repair look like?"',d:.06,nx:1}]},
+    {t:'reveal',spk:'',prompt:'The bridge tests you. Someone you hurt stands at the far end. Which path do you cross on?',opts:[
+      {lbl:'WORDS ONLY',txt:'"I\'m really sorry. I feel terrible." Then walk away.',bad:true,cons:'Rp = 0. The bridge collapses. PI = 0, even with perfect remorse. Words without repair cannot hold weight.',d:-.08},
+      {lbl:'STRUCTURAL REPAIR',txt:'Name what you did. Feel the impact. Own your part. Make a concrete repair plan with time and resources. Stay consistent.',good:true,cons:'All four pillars stand. The bridge holds. PI calculates. The structure bears weight.',d:.16,ka:2,nx:2}
+    ]},
+    {t:'done',txt:'Mendora stands — the bridge of Repair.\n\n🟡 The Gold Vortex II begins to form.',ka:1.5,nb:5}
+  ]},
+  5:{name:'SOLACEA',planet:'🌕',vtag:'VORTEX II — INNER VOICE',vc:'var(--gold)',col:'var(--gold)',scenes:[
+    {t:'narr',a:'solacea',spk:'jaz',txt:'Solacea was quieter than the others. No thunder, no mirrors, no equations in the sky. Just a soft constant light — like the inside of a seashell.\n\nJazmine\'s voice was almost a whisper.\n\n"This bridge teaches you to hear your own inner voice — not the inner critic, not the shame spiral. Jazmine. The original light. The compass that does not lie."',
+     ch:[{t:'Sit with the silence and listen',d:.12,nx:1,ka:1.5},{t:'Ask Jazmine to speak first',d:.09,nx:1}]},
+    {t:'done',txt:'The inner voice grows stronger on Solacea. When the outer noise is loudest, you now have a compass.\n\nBridge V complete. The Gold Vortex II deepens.',ka:2,nb:6}
+  ]},
+  6:{name:'CIRCLIS',planet:'⭕',vtag:'VORTEX II — BOUNDARIES',vc:'var(--gold)',col:'var(--gold)',scenes:[
+    {t:'narr',spk:'krog',txt:'Krog\'s voice came from everywhere at once.\n\n"A boundary is not a wall. A wall says: you cannot come in. A boundary says: this is where I end and you begin."\n\nThe bridge formed a perfect circle — not a barrier, but a threshold.\n\n"The circle that protects is also the circle that frees."',
+     ch:[{t:'"Show me where my boundaries are."',d:.12,nx:1,ka:1.5},{t:'Ask how to hold a boundary without collapsing',d:.09,nx:1}]},
+    {t:'done',vtx:2,txt:'Circlis stands. The circle holds.\n\n🟡 Vortex II is complete — the Gold Mark pulses full.\n\nBridges 7–9 emerge from the distant stars.',ka:2,nb:7}
+  ]},
+  7:{name:'HORIZONIS',planet:'🌅',vtag:'VORTEX III — FUTURE SIGHT',vc:'var(--cyan)',col:'var(--cyan)',scenes:[
+    {t:'narr',a:'horizonis',spk:'wiz',txt:'The Bridge of Future Sight was made of light that had not happened yet. Every plank glowed with a possible version of the path ahead.\n\nWize Wizard\'s outline solidified — more present than he had ever been.\n\n"You have regulated. You have seen clearly. You have built structure. Now —"\n\nHe paused.\n\n"What do you see becoming?"',
+     affm:'I am becoming the person who holds what I have learned. The future is not a threat. It is a direction.',
+     ch:[{t:'Speak the life you are becoming — out loud',d:.16,nx:1,ka:2},{t:'Ask the Wizard to show you one possible future',d:.1,nx:1}]},
+    {t:'done',txt:'The future-bridge holds your footprints. The horizon is not a wall — it is a direction.\n\nBridge VII complete. The 🔵 White-Blue Vortex III begins.',ka:2,nb:8}
+  ]},
+  8:{name:'MAGNIS',planet:'⚡',vtag:'VORTEX III — MAGNITUDE',vc:'var(--cyan)',col:'var(--cyan)',scenes:[
+    {t:'narr',spk:'krog',txt:'Magnis was the heaviest bridge. The planks were stone.\n\nThe weight of every choice made on every bridge gathered here.\n\nBut you were ready. Your RQ was high. Your IRM was clear. Your PI held weight.\n\n"This," Krog said, "is where you find out how much you can carry — and how to carry it without collapsing. The answer is: with regulation. Not suppression. Regulation."',
+     ch:[{t:'I carry it with regulation, not suppression',d:.16,nx:1,ka:2},{t:'Ask Krog to walk beside you',d:.12,nx:1}]},
+    {t:'done',txt:'Magnis stands. You held the magnitude.\n\nBridge VIII complete. Only one bridge remains.',ka:2,nb:9}
+  ]},
+  9:{name:'INTEGRIA',planet:'⚪',vtag:'VORTEX III — FULL RETURN',vc:'var(--cyan)',col:'var(--cyan)',scenes:[
+    {t:'narr',spk:'',txt:'Integria. The Ninth Bridge.\n\nBehind you: nine planetary bridges — Valoron, Veritas, Empathia, Mendora, Solacea, Circlis, Horizonis, Magnis — each one a gate crossed, a vortex navigated, a transformation survived.\n\nThe Tri-Vortex Mark glows on your path:\n🟢 green · 🟡 gold · 🔵 white-blue\n\nAll three. Lit together.\n\nThe mark pulses once, in sync, like a shared heartbeat.\n\nThe luminous doorway opens.',
+     ch:[{t:'Step through the doorway',d:.2,nx:1,ka:3}]},
+    {t:'done',end:true,txt:'You are through.\n\nYou are no longer a traveler who learned a system.\n\nYou are a Bridge Builder.\n\nThe Tri-Vortex Mark burns full. All nine bridges stand behind you.\n\nRQ stabilized. IRM cleared. PI structure holding. Gap closing.\n\nWelcome to the Avatarius.\n\nWelcome to becoming.',ka:5}
+  ]}
+};
+function enterBridge(n){const br=BRG[n];if(!br)return;S.curB=n;S.curS=0;showScreen('game');renderScene();speak('Entering '+br.name+'. '+br.vtag);burst(innerWidth/2,200,br.col,22)}
+function renderScene(){
+  const br=BRG[S.curB];if(!br)return;const sc=br.scenes[S.curS];if(!sc)return;
+  document.getElementById('sbg').style.background='radial-gradient(ellipse at 50% 20%,'+br.col+'18,transparent 72%)';
+  const w=document.getElementById('sw');
+  let h='<div class="shd"><div class="sp">'+br.planet+'</div><div class="sbn">BRIDGE '+RN[S.curB-1]+' · '+br.name+'</div><div class="svt" style="color:'+br.vc+';border-color:'+br.vc+'">'+br.vtag+'</div></div>';
+  const nc=sc.spk==='krog'?'krog':sc.spk==='jaz'?'jaz':sc.spk==='wiz'?'wiz':'';
+  if(sc.t==='narr'){
+    if(sc.a)h+='<div class="sart">'+art(sc.a,br.col)+'</div>';
+    h+='<div class="narr '+nc+'"><p>'+sc.txt.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</p></div>';
+    if(sc.affm)h+='<div class="affm">"'+sc.affm+'"</div>';
+  }
+  if(sc.t==='formula'){
+    if(sc.pre)h+='<div class="narr jaz"><p>'+sc.pre+'</p></div>';
+    h+='<div class="fbox"><h3>'+sc.ttl+'</h3><div class="feq">'+sc.feq+'</div><div class="fexp">'+sc.fexp+'</div></div>';
+    if(sc.affm)h+='<div class="affm">"'+sc.affm+'"</div>';
+  }
+  if(sc.t==='rq_slider'){
+    if(sc.pre)h+='<div class="narr jaz"><p>'+sc.pre+'</p></div>';
+    h+='<div class="slp"><h3>YOUR RQ AUDIT</h3><div class="slr"><div class="slt"><span>I(d) Intentional Disciplines</span><span class="slv" id="sc-id">'+S.dv.id+'</span></div><input type="range" min="0" max="10" step=".5" value="'+S.dv.id+'" oninput="ss(this,\'id\')"></div><div class="slr"><div class="slt"><span>P(s) Perceived Stimuli</span><span class="slv" id="sc-ps">'+S.dv.ps+'</span></div><input type="range" min="0" max="10" step=".5" value="'+S.dv.ps+'" oninput="ss(this,\'ps\')"></div><div class="slr"><div class="slt"><span>T(c) Trauma Carried</span><span class="slv" id="sc-tc">'+S.dv.tc+'</span></div><input type="range" min="0" max="20" step=".5" value="'+S.dv.tc+'" oninput="ss(this,\'tc\')"></div><div class="rb"><div class="rn '+( S.rq>=1?'zg':S.rq>=.5?'zy':'zr')+'" id="scrq">'+S.rq.toFixed(2)+'</div><div class="rz" id="sczn">'+rzl(S.rq)+'</div></div></div>';
+  }
+  if(sc.t==='diamond'){
+    if(sc.pre)h+='<div class="narr jaz"><p>'+sc.pre+'</p></div>';
+    h+='<div class="fbox"><h3>THE TOXIC DIAMOND</h3><div style="position:relative;width:190px;height:190px;margin:0 auto"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><polygon points="100,10 190,100 100,190 10,100" fill="rgba(255,68,68,.08)" stroke="rgba(255,68,68,.55)" stroke-width="1.5"/><circle cx="100" cy="100" r="20" fill="rgba(255,68,68,.12)" stroke="rgba(255,68,68,.3)" stroke-width="1"/><text x="100" y="105" text-anchor="middle" fill="#FF6B6B" font-size="7.5" font-family="Share Tech Mono">RT·DB·EA</text></svg><div style="position:absolute;top:-5px;left:50%;transform:translateX(-50%);font-size:.6rem;color:#FF6B6B;font-family:\'Share Tech Mono\';text-align:center">TRIGGER<br>Anger</div><div style="position:absolute;right:-30px;top:50%;transform:translateY(-50%);font-size:.6rem;color:#FF6B6B;font-family:\'Share Tech Mono\';text-align:center">LOOP<br>Repeat</div><div style="position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);font-size:.6rem;color:#FF6B6B;font-family:\'Share Tech Mono\';text-align:center">OLD PAIN<br>Hurt</div><div style="position:absolute;left:-32px;top:50%;transform:translateY(-50%);font-size:.6rem;color:#FF6B6B;font-family:\'Share Tech Mono\';text-align:center">WOUND<br>Fear</div></div><div style="font-size:.8rem;color:var(--muted);margin-top:13px;line-height:1.7">Trigger → Hidden Wound → Old Pain → Loop → Driven Behavior → Escalating Action<br><em>Name the pattern. Break the spiral.</em></div></div>';
+    if(sc.affm)h+='<div class="affm">"'+sc.affm+'"</div>';
+  }
+  if(sc.t==='reveal'){
+    h+='<div class="narr"><p>'+sc.prompt+'</p></div><div class="chs" id="ca">';
+    sc.opts.forEach((o,i)=>h+='<button class="cb" onclick="cr('+i+')"><strong style="font-family:var(--fm);font-size:.63rem;letter-spacing:2px;display:block;margin-bottom:3px;color:var(--muted)">'+o.lbl+'</strong>'+o.txt+'</button>');
+    h+='</div><div id="ro"></div>';
+  }
+  if(sc.t==='done'){
+    h+='<div class="oc pos"><div class="ol p">'+(sc.end?'◈ JOURNEY COMPLETE':'✓ BRIDGE COMPLETE')+'</div><p style="line-height:1.9">'+sc.txt.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</p>'+(sc.vtx?'<div style="font-size:1.2rem;margin-top:9px">'+(sc.vtx===1?'🟢 Vortex I Complete':'🟡 Vortex II Complete')+'</div>':'')+'</div>';
+    if(!sc.end)h+='<button class="nb" onclick="cbr('+S.curB+','+( sc.ka||0)+','+(sc.nb||0)+')">Earn Bridge Key →</button>';
+    else{cbr(S.curB,sc.ka||0,0,true);h+='<div style="text-align:center;margin-top:26px"><div style="font-family:var(--ft);font-size:1.2rem;color:var(--cyan);letter-spacing:4px;margin-bottom:12px">🔵 TRI-VORTEX MARK COMPLETE</div><button class="nb" onclick="goDash()">View Transformation Dashboard</button></div>'}
+    w.innerHTML=h;return;
+  }
+  if(sc.ch&&sc.t!=='reveal'){h+='<div class="cs"><div class="cp">What do you do?</div><div class="chs">';sc.ch.forEach((c,i)=>h+='<button class="cb" onclick="mc('+i+')">'+c.t+'</button>');h+='</div></div>'}
+  w.innerHTML=h;w.scrollTop=0;
+  if(sc.txt)speak(sc.txt.slice(0,180));else if(sc.pre)speak(sc.pre.slice(0,180));
+}
+function mc(i){const sc=BRG[S.curB].scenes[S.curS];const c=sc.ch[i];if(!c)return;document.querySelectorAll('.cb')[i]?.classList.add('sel');if(c.d)chRQ(c.d);if(c.ka)gainKey(c.ka);speak(c.t);setTimeout(()=>{if(c.nx==='reg')om('collapse');else{S.curS=c.nx!==undefined?c.nx:S.curS+1;renderScene()}},700)}
+function cr(i){const sc=BRG[S.curB].scenes[S.curS];const o=sc.opts[i];document.querySelectorAll('.cb').forEach((b,j)=>{b.disabled=true;b.style.opacity=j===i?'1':'.4'});document.querySelectorAll('.cb')[i]?.classList.add(o.good?'sel':'bad');const ro=document.getElementById('ro');if(!ro)return;ro.innerHTML='<div class="oc '+(o.good?'pos':'neg')+'"><div class="ol '+(o.good?'p':'n')+'">'+(o.good?'✓ INSIGHT':'✗ DISTORTION DETECTED')+'</div><p>'+o.cons+'</p>'+(o.d?'<div class="rqc '+(o.d>0?'up':'dn')+'">RQ '+(o.d>0?'+':'')+o.d.toFixed(2)+'</div>':'')+'</div>';if(o.d)chRQ(o.d);if(o.ka)gainKey(o.ka);speak(o.cons);if(o.good){burst(innerWidth/2,innerHeight/2,'#00FF9F',28);setTimeout(()=>{S.curS=o.nx||S.curS+1;renderScene()},2200)}}
+function ss(el,k){S.dv[k]=parseFloat(el.value);const lb=document.getElementById('sc-'+k);if(lb)lb.textContent=el.value;const {id,ps,tc}=S.dv;const rq=(ps+tc)>0?id/(ps+tc):2;S.rq=Math.max(.05,Math.min(2.5,rq));const re=document.getElementById('scrq');if(re){re.textContent=S.rq.toFixed(2);re.className='rn '+(S.rq>=1?'zg':S.rq>=.5?'zy':'zr')}const rz=document.getElementById('sczn');if(rz)rz.innerHTML=rzl(S.rq);updateHUD()}
+function cbr(n,ka,nb,silent){if(!S.done.includes(n))S.done.push(n);gainKey(ka);updateHUD();if(silent)return;document.getElementById('keytxt').textContent='Bridge '+RN[n-1]+' — '+(BRG[n]?.name||'')+' — complete. '+ka+' keys earned. '+(nb?'Bridge '+RN[nb-1]+' now unlocked.':'');om('key');burst(innerWidth/2,innerHeight/3,'#FFD700',35);speak('Bridge '+(BRG[n]?.name||'')+' complete. '+ka+' keys earned.')}
+function du(el,k){S.dv[k]=parseFloat(el.value);const lb=document.getElementById('dv-'+k);if(lb)lb.textContent=el.value;const d=S.dv;
+  const rq=(d.ps+d.tc)>0?d.id/(d.ps+d.tc):2;S.rq=Math.max(.05,Math.min(2.5,rq));
+  const re=document.getElementById('d-rq');if(re){re.textContent=S.rq.toFixed(2);re.className='bn2 '+(S.rq>=1?'zg':S.rq>=.5?'zy':'zr')}
+  const rz=document.getElementById('d-rqz');if(rz)rz.innerHTML=rzl(S.rq);
+  const rb=document.getElementById('d-rqb');if(rb){rb.style.width=Math.min(100,S.rq/2*100)+'%';rb.style.background=S.rq>=1?'var(--green)':S.rq>=.5?'var(--gold)':'var(--red)'}
+  const irm=(d.la*d.er)/(d.db||.1);S.irm=irm;
+  const ie=document.getElementById('d-irm');if(ie){ie.textContent=irm.toFixed(1);ie.className='bn2 '+(irm>=20?'zg':irm>=10?'zy':'zr')}
+  const iz=document.getElementById('d-irmz');if(iz)iz.textContent=irm>=20?'🟢 HIGH CLARITY':irm>=10?'🟡 MODERATE':'🔴 DISTORTION BLOCKING';
+  const pi=d.r*d.re*d.rp*d.i2;S.pi=pi;
+  const pe=document.getElementById('d-pi');if(pe){pe.textContent=pi.toFixed(0);pe.className='bn2 '+(pi>=200?'zg':pi>=50?'zy':'zr')}
+  const pz=document.getElementById('d-piz');if(pz)pz.textContent=pi>=200?'🟢 STRONG':pi>=50?'🟡 MODERATE':pi>0?'🔴 FRAGILE':'🔴 COLLAPSED';
+  const pw=document.getElementById('pi0w');if(pw)pw.style.display=(d.r===0||d.re===0||d.rp===0||d.i2===0)?'block':'none';
+  const gap=Math.abs(d.la2-d.er2);S.gap=gap;
+  const ge=document.getElementById('d-gap');if(ge){ge.textContent=gap.toFixed(1);ge.className='bn2 '+(gap<=2?'zg':gap<=5?'zy':'zr')}
+  const gz=document.getElementById('d-gapz');if(gz)gz.textContent=gap<=2?'🟢 EMBODIED':gap<=5?'🟡 INTELLECTUAL':'🔴 PERFORMATIVE';
+  const trp=document.getElementById('trp');if(trp)trp.innerHTML='RQ:&nbsp; <strong style="color:'+(S.rq>=1?'var(--green)':S.rq>=.5?'var(--gold)':'var(--red)')+'">'+S.rq.toFixed(2)+'</strong> '+(S.rq>=1?'🟢 Regulated':S.rq>=.5?'🟡 Fragile':'🔴 Overloaded')+'<br>IRM: <strong style="color:'+(irm>=20?'var(--green)':irm>=10?'var(--gold)':'var(--red)')+'">'+irm.toFixed(1)+'</strong> '+(irm>=20?'🟢 High clarity':irm>=10?'🟡 Moderate':'🔴 Low clarity')+'<br>PI:&nbsp; <strong style="color:'+(pi>=200?'var(--green)':pi>=50?'var(--gold)':'var(--red)')+'">'+pi.toFixed(0)+'</strong> '+(pi>=200?'🟢 Strong':pi>=50?'🟡 Moderate':pi>0?'🔴 Fragile':'🔴 Collapsed')+'<br>Gap: <strong style="color:'+(gap<=2?'var(--green)':gap<=5?'var(--gold)':'var(--red)')+'">'+gap.toFixed(1)+'</strong> '+(gap<=2?'🟢 Embodied':gap<=5?'🟡 Intellectual':'🔴 Performative')+'<br><br><span style="color:'+(S.rq>=1&&irm>=10&&pi>=50&&gap<=5?'var(--green)':'var(--gold)')+';letter-spacing:2px">STATUS: '+(S.rq>=1&&irm>=10&&pi>=50&&gap<=5?'✓ READY FOR SERVICE':'⚠ CONTINUE YOUR PATH')+'</span>';
+  updateHUD();
+}
+function initDash(){const d=S.dv;Object.keys(d).forEach(k=>{const e=document.getElementById('dv-'+k);if(e)e.textContent=d[k]});du({value:d.id},'id')}
+const KW=['The suffering of the planet is real. Your pain is real. And still — we breathe together.','You are in the middle layer now. This is not a mistake. This is where the work lives.','Regulation is not weakness. It is the ground from which every good act grows.','Every formula you move is a mirror. What does it show you today?','Hope is not optimism. Hope is the decision to keep moving when the outcome is uncertain.','You are not broken. You are in process.','Small acts of care are not small. They are the architecture of everything.','The Toxic Diamond loses its power the moment you name its corners.','RQ is not a judgment. It is a weather report. Plan accordingly.','The zero property is not punishment. It is physics. The table needs all four legs.'];
+const KM=['The suffering is real. You are seen. Hope is not an illusion.','You are in the middle of something that matters.','The nervous system knows before the mind does.','Every key you earn was already inside you.','Krog holds the space between collapse and flow.'];
+function kw(){const t=KW[Math.floor(Math.random()*KW.length)];document.getElementById('kline').textContent=t;speak(t);gainKey(.05)}
+function kb(){const t='Breathe in… two… three… four. Hold… two. Out… two… three… four… five… six. You are here. This moment is enough.';document.getElementById('kline').textContent=t;speak(t);chRQ(.08)}
+function kh(){const t='Hope is not an illusion. Hope is what remains when compassion keeps moving after grief has spoken.';document.getElementById('kline').textContent=t;speak(t);gainKey(.2);burst(innerWidth/2,innerHeight/2,'#00F5FF',18)}
+function km(){document.getElementById('kline').textContent=KM[Math.floor(Math.random()*KM.length)]}
+function openKrog(){om('krog');kw()}
+const LR=['You are in the right place. This app holds space for you.','Regulation first. Everything else follows.','Whatever you are carrying — you do not carry it alone.','Small steps are still steps. Keep going.','Your nervous system is doing its best. Check your RQ before heavy work.','Hope is not naive. Hope is brave.'];
+async function sendNote(){const inp=document.getElementById('ni'),out=document.getElementById('no');const msg=inp.value.trim();if(!msg)return;inp.value='';out.textContent='Krog is listening…';if(!navigator.onLine){const r=LR[Math.floor(Math.random()*LR.length)];out.textContent=r;speak(r);return}try{const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:150,system:'You are Krog, a compassionate guide in The Avatarius — a transformational journey through 9 bridges. User stats: RQ='+S.rq.toFixed(2)+', IRM='+S.irm.toFixed(1)+', PI='+S.pi.toFixed(0)+', Keys='+S.keys.toFixed(1)+', Bridges: '+S.done.length+'. Respond in 2-3 warm sentences grounded in the Bridges framework.',messages:[{role:'user',content:msg}]})});const data=await res.json();const reply=data.content?.map(c=>c.text||'').join('')||LR[0];out.textContent=reply;speak(reply)}catch{const r=LR[Math.floor(Math.random()*LR.length)];out.textContent=r;speak(r)}}
+function om(id){document.getElementById('m-'+id)?.classList.add('open')}
+function cm(id){document.getElementById('m-'+id)?.classList.remove('open')}
+initDash();updateHUD();
+</script>
+</body>
+</html>
