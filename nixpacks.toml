@@ -1,2 +1,2 @@
 [start]
-cmd = "caddy file-server --root /app --listen :$PORT"
+cmd = "sh start.sh && caddy run --config /app/Caddyfile"
