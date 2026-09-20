@@ -1,1 +1,1 @@
-{"name":"site","scripts":{"start":"npx serve -s . -l ${PORT:-3000}"}}
+{"name":"site","dependencies":{"serve":"14.2.4"},"scripts":{"start":"serve -s . -l tcp://0.0.0.0:${PORT:-3000}"}}
